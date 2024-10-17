@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:newnewsapp/model/news_channel_headlines_model.dart';
+import 'package:newnewsapp/view/categories_screen.dart';
 import 'package:newnewsapp/viewmodel/news_view_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,9 +15,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  NewsViewModel newsViewModel = NewsViewModel();
+  String name = 'bbc-news';
+
+  late NewsViewModel newsViewModel;
 
   final format = DateFormat('MMMM dd, yyyy');
+
+  final Map<String, String> newsSources = {
+    'bbc-news': 'BBC',
+    'cnn': 'CNN',
+    'techcrunch': 'TechCrunch',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    newsViewModel = NewsViewModel(channelName: name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CategoriesScreen()));
+          },
           icon: Image.asset(
             'assets/icons/category_icon.png',
             width: 22,
@@ -37,6 +57,29 @@ class _HomeScreenState extends State<HomeScreen> {
           'NEWS',
           style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700),
         ),
+        actions: [
+          PopupMenuButton<String>(
+            child: const Icon(
+              Icons.more_vert,
+              color: Colors.black,
+              size: 28,
+            ),
+            onSelected: (String value) {
+              setState(() {
+                name = value;
+                newsViewModel = NewsViewModel(channelName: name);
+              });
+            },
+            itemBuilder: (BuildContext context) {
+              return newsSources.entries.map((entry) {
+                return PopupMenuItem<String>(
+                  value: entry.key, // API'deki değer
+                  child: Text(entry.value), // Görüntülemek istediğiniz değer
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -106,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Container(
                                         width: width * .7,
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 8, top: 22, right: 8),
                                         child: Text(
                                           snapshot.data!.articles![index].title
@@ -119,10 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       Container(
                                         width: width * .7,
-                                        padding: EdgeInsets.all(8),
+                                        padding: const EdgeInsets.all(8),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
