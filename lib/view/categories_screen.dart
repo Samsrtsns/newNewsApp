@@ -36,14 +36,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
         title: Text(
           'CATEGORIES',
           style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700),
         ),
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          const SizedBox(height: 12,),
+          const SizedBox(
+            height: 12,
+          ),
           SizedBox(
             height: 50,
             child: ListView.builder(
@@ -51,10 +56,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               itemCount: categoriesList.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  canRequestFocus : false ,
-                  excludeFromSemantics : false ,
-                  autofocus: false ,
-                  enableFeedback: false ,
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  canRequestFocus: false,
+                  excludeFromSemantics: false,
+                  autofocus: false,
+                  enableFeedback: false,
                   onTap: () {
                     setState(() {
                       categoryNames = categoriesList[index];
@@ -107,7 +114,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       DateTime dateTime = DateTime.parse(snapshot
                           .data!.articles![index].publishedAt
                           .toString());
-                      return Padding(
+                      String ? imageUrl = snapshot.data!.articles![index].urlToImage;
+                      print(imageUrl);
+                      if(imageUrl == null || imageUrl.isEmpty) {
+                         return SizedBox();
+                      } else {
+                        return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
@@ -135,24 +147,27 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ),
                             Expanded(
                               child: Container(
-                                  height: height * .18,
-                                  padding:
-                                      const EdgeInsets.only(left: 16, right: 8),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        snapshot.data!.articles![index].title
-                                            .toString(),
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.black, fontSize: 13),
-                                        maxLines: 4,
-                                      ),
-                                      const Spacer(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
+                                height: height * .18,
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 8),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      snapshot.data!.articles![index].title
+                                          .toString(),
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.black, fontSize: 13),
+                                      maxLines: 4,
+                                    ),
+                                    const Spacer(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          height: 20,
+                                          width: 90,
+                                          child: Text(
                                             snapshot.data!.articles![index]
                                                 .source!.name
                                                 .toString()
@@ -162,25 +177,29 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
                                             ),
+                                            overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                           ),
-                                          Text(
-                                            format.format(dateTime).toString(),
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.grey.shade500,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                            maxLines: 4,
+                                        ),
+                                        Text(
+                                          format.format(dateTime).toString(),
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.grey.shade500,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.normal,
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  )),
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       );
+                      }
                     },
                   );
                 }

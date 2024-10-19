@@ -33,10 +33,6 @@ class NewsRepository {
 
     final response = await http.get(Uri.parse(url));
 
-    if (kDebugMode) {
-      print(response.body);
-    }
-
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       return CategoriesNewsModel.fromJson(body);
