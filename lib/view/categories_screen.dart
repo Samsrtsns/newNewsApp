@@ -115,9 +115,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           .data!.articles![index].publishedAt
                           .toString());
                       String ? imageUrl = snapshot.data!.articles![index].urlToImage;
-                      print(imageUrl);
                       if(imageUrl == null || imageUrl.isEmpty) {
-                         return SizedBox();
+                         return const SizedBox();
                       } else {
                         return Padding(
                         padding: const EdgeInsets.all(8.0),
